@@ -109,10 +109,10 @@ class CaloriesCalculator(Calculator):
 
 def main():
     cash = CashCalculator(300)
-    cash.add_record(Record(amount=750, date='18.12.2020', comment='Пицца в Додо'))
+    cash.add_record(Record(amount=850, date='18.12.2020', comment='Пицца в Додо'))
 
     calories = CaloriesCalculator(500)
-    calories.add_record(Record(amount=330, date='18.12.2020', comment='Пицца'))
+    calories.add_record(Record(amount=430, date='18.12.2020', comment='Пицца'))
 
     print(cash.get_today_cash_remained('eur'))
     print(calories.get_calories_remained())

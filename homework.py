@@ -39,6 +39,7 @@ class Calculator:
         """
         return self.limit - self.get_today_stats()    
 
+
 class Record:
     """
     Класс для записи расходов или каллорий
@@ -52,6 +53,7 @@ class Record:
         else:
             date_format = '%d.%m.%Y'
             self.date = dt.datetime.strptime(date, date_format).date()
+
 
 class CashCalculator(Calculator):
     """
@@ -69,7 +71,6 @@ class CashCalculator(Calculator):
         Считаем сколько ещё денег можно потратить сегодня
         """
         cash_for_today = self.get_today_stats()
-        cash_residual = self.get_today_remained()
         
         dict_currency = {
             'rub': ('руб', self.RUB_RATE),
@@ -77,15 +78,16 @@ class CashCalculator(Calculator):
             'eur': ('Euro', self.EURO_RATE)
             }
 
-        for value in dict_currency:
-            if value == currency:
-                valuta, rate = dict_currency.get(value)      
+        valuta, rate = dict_currency.get(currency)     
+        cash_residual = round(self.get_today_remained()/rate, 2)
+        residual_abs = abs(cash_residual)
 
         if cash_for_today == self.limit:
             return 'Денег нет, держись'
         elif cash_for_today < self.limit:
-            return f'На сегодня осталось {round(cash_residual/rate, 2)} {valuta}'
-        return f'Денег нет, держись: твой долг - {round(abs(cash_residual/rate),2)} {valuta}'
+            return f'На сегодня осталось {cash_residual} {valuta}'
+        return f'Денег нет, держись: твой долг - {residual_abs} {valuta}'
+
 
 class CaloriesCalculator(Calculator):
     """
@@ -107,10 +109,10 @@ class CaloriesCalculator(Calculator):
 
 def main():
     cash = CashCalculator(300)
-    cash.add_record(Record(amount=750, date='17.12.2020', comment='Пицца в Додо'))
+    cash.add_record(Record(amount=750, date='18.12.2020', comment='Пицца в Додо'))
 
     calories = CaloriesCalculator(500)
-    calories.add_record(Record(amount=330, date='17.12.2020', comment='Пицца'))
+    calories.add_record(Record(amount=330, date='18.12.2020', comment='Пицца'))
 
     print(cash.get_today_cash_remained('eur'))
     print(calories.get_calories_remained())
